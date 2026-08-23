@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mascotas</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+<body>
+<header class="navbar">
+    <div class="logo">🐾 Veterinaria</div>
+    <nav>
+        <a href="../index.html">Inicio</a>
+        <a href="propietarios.html">Propietarios</a>
+        <a href="mascotas.html">Mascotas</a>
+        <a href="vacunas.html">Vacunas</a>
+    </nav>
+</header>
+
+<main class="container">
+    <h1>Registrar mascota</h1>
+    <form class="form-card">
+        <label>Nombre
+            <input type="text" name="nombre" placeholder="Nombre de la mascota">
+        </label>
+        <label>Especie
+            <select name="especie">
+                <option value="">Seleccionar</option>
+                <option>Perro</option>
+                <option>Gato</option>
+                <option>Otro</option>
+            </select>
+        </label>
+        <label>Raza
+            <input type="text" name="raza" placeholder="Raza">
+        </label>
+        <label>Sexo
+            <select name="sexo">
+                <option value="">Seleccionar</option>
+                <option>Macho</option>
+                <option>Hembra</option>
+            </select>
+        </label>
+        <label>Fecha de nacimiento
+            <input type="date" name="fechaNacimiento">
+        </label>
+        <label>Peso (kg)
+            <input type="number" step="0.1" name="peso" placeholder="0.0">
+        </label>
+        <label>Propietario
+            <select name="propietario">
+                <option value="">Seleccionar propietario</option>
+            </select>
+        </label>
+        <div class="actions">
+            <button type="submit" class="button">Guardar mascota</button>
+            <button type="reset" class="button secondary">Cancelar</button>
+        </div>
+    </form>
+</main>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vacunas</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+<body>
+<header class="navbar">
+    <div class="logo">🐾 Veterinaria</div>
+    <nav>
+        <a href="../index.html">Inicio</a>
+        <a href="propietarios.html">Propietarios</a>
+        <a href="mascotas.html">Mascotas</a>
+        <a href="vacunas.html">Vacunas</a>
+    </nav>
+</header>
+
+<main class="container">
+    <h1>Historial de vacunas</h1>
+
+    <div class="info-card">
+        <p><strong>Mascota:</strong> Max</p>
+        <p><strong>Propietario:</strong> Juan Pérez</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Vacuna</th>
+                <th>Fecha de aplicación</th>
+                <th>Próxima fecha</th>
+                <th>Observaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Rabia</td>
+                <td>10/05/2026</td>
+                <td>10/05/2027</td>
+                <td>Aplicación normal</td>
+            </tr>
+            <tr>
+                <td>Parvovirus</td>
+                <td>15/06/2026</td>
+                <td>15/06/2027</td>
+                <td>Sin novedades</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Registrar vacuna</h2>
+    <form class="form-card">
+        <label>Vacuna
+            <input type="text" placeholder="Nombre de la vacuna">
+        </label>
+        <label>Fecha de aplicación
+            <input type="date">
+        </label>
+        <label>Próxima fecha
+            <input type="date">
+        </label>
+        <label>Observaciones
+            <textarea placeholder="Observaciones"></textarea>
+        </label>
+        <button type="submit" class="button">Guardar vacuna</button>
+    </form>
+</main>
+</body>
+</html>
