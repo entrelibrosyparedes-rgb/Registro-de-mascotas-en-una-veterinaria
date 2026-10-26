@@ -7,7 +7,11 @@ consultar la información de .
 • próxima fecha de vacunas
 • historial de las mascota*/
 //dueño
-
+import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.HttpExchange;
+import java.net.InetSocketAddress;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -179,8 +183,44 @@ public class veterinaria implements registro {
 
         }
     }
+    public void iniciarServidor() throws IOException {
+    HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
 
-    public static void main(String[] args) {
+    server.createContext("/api/mascotas", (HttpExchange exchange) -> {
+
+        exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "*");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+
+        if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+            exchange.sendResponseHeaders(204, -1);
+            return;
+        }
+
+        if (exchange.getRequestMethod().equalsIgnoreCase("POST")) {
+
+            String body = new String(exchange.getRequestBody().readAllBytes());
+
+            System.out.println("Datos recibidos:");
+            System.out.println(body);
+
+            String respuesta = "{\"mensaje\":\"Mascota registrada correctamente\"}";
+
+            exchange.getResponseHeaders().add("Content-Type", "application/json");
+
+            exchange.sendResponseHeaders(200, respuesta.getBytes().length);
+
+            OutputStream os = exchange.getResponseBody();
+            os.write(respuesta.getBytes());
+            os.close();
+        }
+    });
+
+    server.start();
+
+    System.out.println("Servidor iniciado en http://localhost:8080");
+}
+   /*  public static void main(String[] args) {
         veterinaria sistema = new veterinaria();
         Scanner scanner = new Scanner(System.in);
         int opcion;
@@ -208,4 +248,12 @@ public class veterinaria implements registro {
         } while (opcion != 3);
         scanner.close();
     }
+}*/
+public static void main(String[] args) throws IOException {
+
+    veterinaria sistema = new veterinaria();
+
+    sistema.iniciarServidor();
+
+    System.out.println("Backend ejecutándose...");
 }
