@@ -3,61 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mascotas</title>
+    <title>Registrar mascotas | Veterinaria</title>
     <link rel="stylesheet" href="../css/estilos.css">
 </head>
 <body>
-<header class="navbar">
-    <div class="logo">🐾 Veterinaria</div>
-    <nav>
-        <a href="../index.html">Inicio</a>
-        <a href="propietarios.html">Propietarios</a>
-        <a href="mascotas.html">Mascotas</a>
-        <a href="vacunas.html">Vacunas</a>
-    </nav>
-</header>
 
-<main class="container">
-    <h1>Registrar mascota</h1>
-    <form id="formMascota" class="form-card">
-        <label>Nombre
-            <input type="text" name="nombre" placeholder="Nombre de la mascota">
-        </label>
-        <label>Especie
-            <select name="especie">
-                <option value="">Seleccionar</option>
-                <option>Perro</option>
-                <option>Gato</option>
-                <option>Otro</option>
-            </select>
-        </label>
-        <label>Raza
-            <input type="text" name="raza" placeholder="Raza">
-        </label>
-        <label>Sexo
-            <select name="sexo">
-                <option value="">Seleccionar</option>
-                <option>Macho</option>
-                <option>Hembra</option>
-            </select>
-        </label>
-        <label>Fecha de nacimiento
-            <input type="date" name="fechaNacimiento">
-        </label>
-        <label>Peso (kg)
-            <input type="number" step="0.1" name="peso" placeholder="0.0">
-        </label>
-        <label>Propietario
-            <select name="propietario">
-                <option value="">Seleccionar propietario</option>
-            </select>
-        </label>
-        <div class="actions">
-            <button type="submit" class="button">Guardar mascota</button>
-            <button type="reset" class="button secondary">Cancelar</button>
-        </div>
-    </form>
-</main>
-<script src="../js/mascotas.js"></script>
+    <header class="navbar">
+        <div class="logo">🐾 Veterinaria</div>
+        <nav>
+            <a href="../index.html">Inicio</a>
+            <a href="propietarios.html">Propietarios</a>
+            <a href="mascotas.html">Mascotas</a>
+            <a href="vacunas.html">Vacunas</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1>Registrar mascota</h1>
+        <p>Completa los siguientes datos para registrar una mascota.</p>
+
+        <form id="formMascota" class="form-card">
+
+            <label for="nombre">Nombre de la mascota
+                <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    placeholder="Ejemplo: Max"
+                    maxlength="100"
+                    required
+                >
+            </label>
+
+            <label for="especie">Especie
+                <select id="especie" name="especie" required>
+                    <option value="">Seleccionar especie</option>
+                    <option value="Perro">Perro</option>
+                    <option value="Gato">Gato</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </label>
+
+            <label for="raza">Raza
+                <input
+                    type="text"
+                    id="raza"
+                    name="raza"
+                    placeholder="Ejemplo: Labrador"
+                    maxlength="100"
+                >
+            </label>
+
+            <label for="sexo">Sexo
+                <select id="sexo" name="sexo">
+                    <option value="">Seleccionar sexo</option>
+                    <option value="Macho">Macho</option>
+                    <option value="Hembra">Hembra</option>
+                </select>
+            </label>
+
+            <label for="fechaNacimiento">Fecha de nacimiento
+                <input
+                    type="date"
+                    id="fechaNacimiento"
+                    name="fechaNacimiento"
+                >
+            </label>
+
+            <label for="peso">Peso (kg)
+                <input
+                    type="number"
+                    id="peso"
+                    name="peso"
+                    placeholder="Ejemplo: 5.5"
+                    min="0.01"
+                    max="9999.99"
+                    step="0.01"
+                >
+            </label>
+
+            <label for="propietario">Propietario
+                <select id="propietario" name="propietario">
+                    <option value="">Seleccionar propietario</option>
+                </select>
+            </label>
+
+            <div class="actions">
+                <button type="submit" class="button">
+                    Guardar mascota
+                </button>
+
+                <button type="reset" class="button secondary">
+                    Limpiar formulario
+                </button>
+            </div>
+
+        </form>
+    </main>
+
+    <script src="../js/mascotas.js"></script>
+
 </body>
 </html>

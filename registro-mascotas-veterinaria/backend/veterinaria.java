@@ -1,237 +1,42 @@
-
-import com.sun.net.httpserver.HttpServer;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer;
+
+import dao.MascotaDAO;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
-abstract class veterinario {
-    protected String nombreDueño;
-    protected String nombreMascota;
-    protected String especie;
-    protected String vacunas;
-    protected String fechasVacunas;
-    protected String proximaVacuna;
-    protected String sexo;
-    protected String peso;
+public class veterinaria {
 
-    public veterinario(
-            String nombreDueño,
-            String nombreMascota,
-            String especie,
-            String vacunas,
-            String fechasVacunas,
-            String proximaVacuna,
-            String sexo,
-            String peso) {
+    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final MascotaDAO dao = new MascotaDAO();
 
-        this.nombreDueño = nombreDueño;
-        this.nombreMascota = nombreMascota;
-        this.especie = especie;
-        this.vacunas = vacunas;
-        this.fechasVacunas = fechasVacunas;
-        this.proximaVacuna = proximaVacuna;
-        this.sexo = sexo;
-        this.peso = peso;
-    }
-
-    public abstract void mostrarInformacion();
-}
-
-class Perro extends veterinario {
-    private String raza;
-
-    public Perro(
-            String nombreDueño,
-            String nombreMascota,
-            String raza,
-            String vacunas,
-            String fechasVacunas,
-            String proximaVacuna,
-            String sexo,
-            String peso) {
-
-        super(nombreDueño, nombreMascota, "Perro", vacunas,
-                fechasVacunas, proximaVacuna, sexo, peso);
-        this.raza = raza;
-    }
-
-    @Override
-    public void mostrarInformacion() {
-        System.out.println("Información del perro");
-        System.out.println("Dueño: " + nombreDueño);
-        System.out.println("Mascota: " + nombreMascota);
-        System.out.println("Raza: " + raza);
-        System.out.println("Sexo: " + sexo);
-        System.out.println("Vacunas: " + vacunas);
-        System.out.println("Fecha de vacunación: " + fechasVacunas);
-        System.out.println("Próxima vacuna: " + proximaVacuna);
-        System.out.println("Peso: " + peso);
-    }
-}
-
-class Gato extends veterinario {
-    private String raza;
-
-    public Gato(
-            String nombreDueño,
-            String nombreMascota,
-            String raza,
-            String vacunas,
-            String fechasVacunas,
-            String proximaVacuna,
-            String sexo,
-            String peso) {
-
-        super(nombreDueño, nombreMascota, "Gato", vacunas,
-                fechasVacunas, proximaVacuna, sexo, peso);
-        this.raza = raza;
-    }
-
-    @Override
-    public void mostrarInformacion() {
-        System.out.println("Información del gato");
-        System.out.println("Dueño: " + nombreDueño);
-        System.out.println("Mascota: " + nombreMascota);
-        System.out.println("Raza: " + raza);
-        System.out.println("Sexo: " + sexo);
-        System.out.println("Vacunas: " + vacunas);
-        System.out.println("Fecha de vacunación: " + fechasVacunas);
-        System.out.println("Próxima vacuna: " + proximaVacuna);
-        System.out.println("Peso: " + peso);
-    }
-}
-
-class Pajaros extends veterinario {
-    private String especiePajaro;
-
-    public Pajaros(
-            String nombreDueño,
-            String nombreMascota,
-            String especiePajaro,
-            String vacunas,
-            String fechasVacunas,
-            String proximaVacuna,
-            String sexo,
-            String peso) {
-
-        super(nombreDueño, nombreMascota, "Pájaro", vacunas,
-                fechasVacunas, proximaVacuna, sexo, peso);
-        this.especiePajaro = especiePajaro;
-    }
-
-    @Override
-    public void mostrarInformacion() {
-        System.out.println("Información del pájaro");
-        System.out.println("Dueño: " + nombreDueño);
-        System.out.println("Mascota: " + nombreMascota);
-        System.out.println("Especie del pájaro: " + especiePajaro);
-        System.out.println("Sexo: " + sexo);
-        System.out.println("Vacunas: " + vacunas);
-        System.out.println("Fecha de vacunación: " + fechasVacunas);
-        System.out.println("Próxima vacuna: " + proximaVacuna);
-        System.out.println("Peso: " + peso);
-    }
-}
-
-interface registro {
-    void registrarMascota();
-    void consultarMascota();
-}
-
-public class veterinaria implements registro {
-
-    private final Scanner scanner = new Scanner(System.in);
-    private final ArrayList<veterinario> mascotasRegistradas =
-            new ArrayList<>();
-
-    private final Path archivoMascotas = buscarArchivo();
-
-    private static Path buscarArchivo() {
-        Path local = Path.of("database", "mascotas.json");
-        Path superior = Path.of("..", "database", "mascotas.json");
-
-        if (Files.isDirectory(Path.of("database"))) {
-            return local;
-        }
-
-        return superior;
-    }
-
-    private synchronized String leerMascotas() throws IOException {
-        if (!Files.exists(archivoMascotas)) {
-            Files.createDirectories(archivoMascotas.getParent());
-            Files.writeString(
-                    archivoMascotas,
-                    "[]",
-                    StandardCharsets.UTF_8
-            );
-        }
-
-        return Files.readString(
-                archivoMascotas,
-                StandardCharsets.UTF_8
-        );
-    }
-
-    private synchronized void guardarMascota(String json)
-            throws IOException {
-
-        String contenido = leerMascotas().trim();
-
-        if (!contenido.startsWith("[")
-                || !contenido.endsWith("]")) {
-            throw new IOException("El archivo JSON no es válido.");
-        }
-
-        String interior = contenido.substring(
-                1, contenido.length() - 1
-        ).trim();
-
-        String nuevoContenido;
-
-        if (interior.isEmpty()) {
-            nuevoContenido = "[" + json + "]";
-        } else {
-            nuevoContenido = "[" + interior + "," + json + "]";
-        }
-
-        Files.writeString(
-                archivoMascotas,
-                nuevoContenido,
-                StandardCharsets.UTF_8
-        );
-    }
-
-    private void responder(
+    private static void responder(
             HttpExchange exchange,
             int estado,
-            String cuerpo) throws IOException {
+            Object contenido) throws IOException {
 
-        byte[] datos = cuerpo.getBytes(StandardCharsets.UTF_8);
+        byte[] datos = mapper.writeValueAsBytes(contenido);
 
         exchange.getResponseHeaders().set(
                 "Content-Type",
                 "application/json; charset=UTF-8"
         );
-
         exchange.getResponseHeaders().set(
                 "Access-Control-Allow-Origin", "*"
         );
-
         exchange.getResponseHeaders().set(
                 "Access-Control-Allow-Headers", "Content-Type"
         );
-
         exchange.getResponseHeaders().set(
-                "Access-Control-Allow-Methods",
-                "GET, POST, OPTIONS"
+                "Access-Control-Allow-Methods", "GET, POST, OPTIONS"
         );
 
         exchange.sendResponseHeaders(estado, datos.length);
@@ -256,115 +61,77 @@ public class veterinaria implements registro {
                             "Access-Control-Allow-Origin", "*"
                     );
                     exchange.getResponseHeaders().set(
-                            "Access-Control-Allow-Headers",
-                            "Content-Type"
+                            "Access-Control-Allow-Headers", "Content-Type"
                     );
                     exchange.getResponseHeaders().set(
-                            "Access-Control-Allow-Methods",
-                            "GET, POST, OPTIONS"
+                            "Access-Control-Allow-Methods", "GET, POST, OPTIONS"
                     );
-
                     exchange.sendResponseHeaders(204, -1);
                     exchange.close();
                     return;
                 }
 
                 if (metodo.equalsIgnoreCase("GET")) {
-                    responder(exchange, 200, leerMascotas());
+                    List<Map<String, Object>> mascotas = dao.listar();
+                    responder(exchange, 200, mascotas);
                     return;
                 }
 
                 if (metodo.equalsIgnoreCase("POST")) {
-                    String cuerpo = new String(
-                            exchange.getRequestBody().readAllBytes(),
-                            StandardCharsets.UTF_8
-                    ).trim();
+                    Map<String, Object> mascota = mapper.readValue(
+                            exchange.getRequestBody(),
+                            new TypeReference<Map<String, Object>>() {}
+                    );
 
-                    if (!cuerpo.startsWith("{")
-                            || !cuerpo.endsWith("}")) {
-                        responder(
-                                exchange,
-                                400,
-                                "{\"error\":\"JSON inválido\"}"
-                        );
+                    if (mascota.get("nombre") == null
+                            || mascota.get("especie") == null
+                            || mascota.get("nombre").toString().isBlank()
+                            || mascota.get("especie").toString().isBlank()) {
+                        responder(exchange, 400,
+                                Map.of("error", "El nombre y la especie son obligatorios"));
                         return;
                     }
 
-                    guardarMascota(cuerpo);
+                    boolean guardada = dao.guardar(mascota);
 
-                    System.out.println(
-                            "Mascota guardada en: "
-                                    + archivoMascotas.toAbsolutePath()
-                    );
-
-                    responder(
-                            exchange,
-                            201,
-                            "{\"mensaje\":\"Mascota guardada correctamente\"}"
-                    );
+                    if (guardada) {
+                        responder(exchange, 201,
+                                Map.of("mensaje", "Mascota guardada correctamente"));
+                    } else {
+                        responder(exchange, 500,
+                                Map.of("error", "No se pudo guardar la mascota"));
+                    }
                     return;
                 }
 
-                responder(
-                        exchange,
-                        405,
-                        "{\"error\":\"Método no permitido\"}"
-                );
+                responder(exchange, 405,
+                        Map.of("error", "Método no permitido"));
+
+            } catch (SQLException error) {
+                error.printStackTrace();
+                responder(exchange, 500,
+                        Map.of("error", "Error en la base de datos: "
+                                + error.getMessage()));
 
             } catch (Exception error) {
                 error.printStackTrace();
-
-                try {
-                    responder(
-                            exchange,
-                            500,
-                            "{\"error\":\"Error al procesar la solicitud\"}"
-                    );
-                } catch (IOException ignorado) {
-                    exchange.close();
-                }
+                responder(exchange, 400,
+                        Map.of("error", "No se pudo procesar la solicitud: "
+                                + error.getMessage()));
             }
         });
 
         server.start();
-
-        System.out.println(
-                "Servidor iniciado en http://localhost:8080"
-        );
-
-        System.out.println(
-                "Archivo de datos: "
-                        + archivoMascotas.toAbsolutePath()
-        );
-    }
-
-    @Override
-    public void registrarMascota() {
-        System.out.println(
-                "El registro se realiza desde el formulario web."
-        );
-    }
-
-    @Override
-    public void consultarMascota() {
-        try {
-            System.out.println(leerMascotas());
-        } catch (IOException error) {
-            System.out.println(
-                    "No se pudieron consultar las mascotas."
-            );
-        }
+        System.out.println("Servidor iniciado en http://localhost:8080");
+        System.out.println("Base de datos: veterinaria");
     }
 
     public static void main(String[] args) {
-        veterinaria sistema = new veterinaria();
-
         try {
-            sistema.iniciarServidor();
+            new veterinaria().iniciarServidor();
         } catch (IOException error) {
             System.err.println(
-                    "No se pudo iniciar el servidor: "
-                            + error.getMessage()
+                    "No se pudo iniciar el servidor: " + error.getMessage()
             );
         }
     }
