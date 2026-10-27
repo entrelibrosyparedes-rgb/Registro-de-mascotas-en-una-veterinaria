@@ -14,6 +14,7 @@ Este repositorio corresponde al avance inicial del proyecto:
 ## Tecnologías
 
 - Backend: Java + Spring Boot
+- Java de compilación: 25 (JDK 25 requerido para compilar y ejecutar el backend)
 - Frontend: HTML5 + CSS3 + JavaScript
 - Base de datos: MySQL
 - Control de versiones: Git + GitHub

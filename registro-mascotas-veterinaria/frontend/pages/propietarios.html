@@ -3,43 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Propietarios</title>
+    <title>Propietarios | Veterinaria</title>
     <link rel="stylesheet" href="../css/estilos.css">
 </head>
 <body>
-<header class="navbar">
-    <div class="logo">🐾 Veterinaria</div>
-    <nav>
-        <a href="../index.html">Inicio</a>
-        <a href="propietarios.html">Propietarios</a>
-        <a href="mascotas.html">Mascotas</a>
-        <a href="vacunas.html">Vacunas</a>
-    </nav>
-</header>
 
-<main class="container">
-    <h1>Registrar propietario</h1>
-    <form class="form-card">
-        <label>Nombre
-            <input type="text" name="nombre" placeholder="Nombre">
-        </label>
-        <label>Apellido
-            <input type="text" name="apellido" placeholder="Apellido">
-        </label>
-        <label>Teléfono
-            <input type="tel" name="telefono" placeholder="Teléfono">
-        </label>
-        <label>Correo
-            <input type="email" name="correo" placeholder="correo@ejemplo.com">
-        </label>
-        <label>Dirección
-            <input type="text" name="direccion" placeholder="Dirección">
-        </label>
-        <div class="actions">
-            <button type="submit" class="button">Guardar</button>
-            <button type="reset" class="button secondary">Cancelar</button>
-        </div>
-    </form>
-</main>
+    <header class="navbar">
+        <div class="logo">🐾 Veterinaria</div>
+        <nav>
+            <a href="../index.html">Inicio</a>
+            <a href="propietarios.html">Propietarios</a>
+            <a href="mascotas.html">Mascotas</a>
+            <a href="vacunas.html">Vacunas</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1>Registrar propietario</h1>
+        <p>Completa los datos de contacto del propietario.</p>
+
+        <form id="formPropietario" class="form-card">
+
+            <label for="nombre">Nombre
+                <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    placeholder="Nombre"
+                    maxlength="100"
+                    required
+                >
+            </label>
+
+            <label for="apellido">Apellido
+                <input
+                    type="text"
+                    id="apellido"
+                    name="apellido"
+                    placeholder="Apellido"
+                    maxlength="100"
+                    required
+                >
+            </label>
+
+            <label for="telefono">Teléfono
+                <input
+                    type="tel"
+                    id="telefono"
+                    name="telefono"
+                    placeholder="Teléfono"
+                    maxlength="30"
+                >
+            </label>
+
+            <label for="correo">Correo electrónico
+                <input
+                    type="email"
+                    id="correo"
+                    name="correo"
+                    placeholder="correo@ejemplo.com"
+                    maxlength="150"
+                >
+            </label>
+
+            <label for="direccion">Dirección
+                <input
+                    type="text"
+                    id="direccion"
+                    name="direccion"
+                    placeholder="Dirección"
+                    maxlength="200"
+                >
+            </label>
+
+            <div class="actions">
+                <button type="submit" class="button">
+                    Guardar propietario
+                </button>
+
+                <button type="reset" class="button secondary">
+                    Limpiar formulario
+                </button>
+            </div>
+
+        </form>
+
+        <p id="mensajePropietario" role="status"></p>
+    </main>
+
+    <script src="../js/propietarios.js"></script>
+
 </body>
 </html>
