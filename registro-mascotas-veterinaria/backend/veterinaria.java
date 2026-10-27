@@ -1,19 +1,15 @@
-/*La solución es  un sistema de registro de las mascotas que nos permita almacenar y 
-consultar la información de .
-• nombre y datos de la mascotas 
-• información del dueño
-• vacunas aplicada 
-• fecha de vacunación
-• próxima fecha de vacunas
-• historial de las mascota*/
-//dueño
+
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpExchange;
-import java.net.InetSocketAddress;
+
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Scanner;
+import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 abstract class veterinario {
     protected String nombreDueño;
@@ -25,8 +21,16 @@ abstract class veterinario {
     protected String sexo;
     protected String peso;
 
-    public veterinario(String nombreDueño, String nombreMascota, String especie, String vacunas, String fechasVacunas,
-            String proximaVacuna, String sexo, String peso) {
+    public veterinario(
+            String nombreDueño,
+            String nombreMascota,
+            String especie,
+            String vacunas,
+            String fechasVacunas,
+            String proximaVacuna,
+            String sexo,
+            String peso) {
+
         this.nombreDueño = nombreDueño;
         this.nombreMascota = nombreMascota;
         this.especie = especie;
@@ -41,219 +45,327 @@ abstract class veterinario {
 }
 
 class Perro extends veterinario {
-
     private String raza;
 
-    public Perro(String nombreDueño, String nombreMascota, String raza, String vacunas, String fechasVacunas,
-            String proximaVacuna, String sexo, String especie, String peso) {
-        super(nombreDueño, nombreMascota, especie, vacunas, fechasVacunas, proximaVacuna, sexo, peso);
-        this.raza = raza;
+    public Perro(
+            String nombreDueño,
+            String nombreMascota,
+            String raza,
+            String vacunas,
+            String fechasVacunas,
+            String proximaVacuna,
+            String sexo,
+            String peso) {
 
+        super(nombreDueño, nombreMascota, "Perro", vacunas,
+                fechasVacunas, proximaVacuna, sexo, peso);
+        this.raza = raza;
     }
 
     @Override
     public void mostrarInformacion() {
-        System.out.println("informcion del perro");
-        System.out.println("dueño: " + nombreDueño);
-        System.out.println("Mascota: " + nombreMascota + " | Raza: " + raza + " | Sexo: " + sexo);
-        System.out.println("especie: " + especie);// puede ser que lo elimine
-        System.out.println("vacunas: " + vacunas);
-        System.out.println("fecha de vacuna: " + fechasVacunas);
-        System.out.println("próxima vacuna: " + proximaVacuna);
-        System.out.println("peso: " + peso);
+        System.out.println("Información del perro");
+        System.out.println("Dueño: " + nombreDueño);
+        System.out.println("Mascota: " + nombreMascota);
+        System.out.println("Raza: " + raza);
+        System.out.println("Sexo: " + sexo);
+        System.out.println("Vacunas: " + vacunas);
+        System.out.println("Fecha de vacunación: " + fechasVacunas);
+        System.out.println("Próxima vacuna: " + proximaVacuna);
+        System.out.println("Peso: " + peso);
     }
 }
 
 class Gato extends veterinario {
     private String raza;
 
-    public Gato(String nombreDueño, String nombreMascota, String raza, String vacunas, String fechasVacunas,
-            String proximaVacuna, String sexo, String especie, String peso) {
-        super(nombreDueño, nombreMascota, especie, vacunas, fechasVacunas, proximaVacuna, sexo, peso);
-        this.raza = raza;
+    public Gato(
+            String nombreDueño,
+            String nombreMascota,
+            String raza,
+            String vacunas,
+            String fechasVacunas,
+            String proximaVacuna,
+            String sexo,
+            String peso) {
 
+        super(nombreDueño, nombreMascota, "Gato", vacunas,
+                fechasVacunas, proximaVacuna, sexo, peso);
+        this.raza = raza;
     }
 
     @Override
     public void mostrarInformacion() {
-        System.out.println("informcion del gato");
-        System.out.println("dueño: " + nombreDueño);
-        System.out.println("mascota: " + nombreMascota + " | Raza: " + raza + " | Sexo: " + sexo);
-        System.out.println("especie: " + especie);
-        System.out.println("vacunas: " + vacunas);
-        System.out.println("fecha de vacuna: " + fechasVacunas);
-        System.out.println("próxima vacuna: " + proximaVacuna);
-        System.out.println("peso: " + peso);
+        System.out.println("Información del gato");
+        System.out.println("Dueño: " + nombreDueño);
+        System.out.println("Mascota: " + nombreMascota);
+        System.out.println("Raza: " + raza);
+        System.out.println("Sexo: " + sexo);
+        System.out.println("Vacunas: " + vacunas);
+        System.out.println("Fecha de vacunación: " + fechasVacunas);
+        System.out.println("Próxima vacuna: " + proximaVacuna);
+        System.out.println("Peso: " + peso);
     }
 }
 
 class Pajaros extends veterinario {
-    public Pajaros(String nombreDueño, String nombreMascota, String especie, String vacunas, String fechasVacunas,
-            String proximaVacuna, String sexo, String especiePajaros, String peso) {
-        super(nombreDueño, nombreMascota, especie, vacunas, fechasVacunas, proximaVacuna, sexo, peso);
-        this.especie = especiePajaros;
+    private String especiePajaro;
 
+    public Pajaros(
+            String nombreDueño,
+            String nombreMascota,
+            String especiePajaro,
+            String vacunas,
+            String fechasVacunas,
+            String proximaVacuna,
+            String sexo,
+            String peso) {
+
+        super(nombreDueño, nombreMascota, "Pájaro", vacunas,
+                fechasVacunas, proximaVacuna, sexo, peso);
+        this.especiePajaro = especiePajaro;
     }
 
     @Override
     public void mostrarInformacion() {
-        System.out.println("informcion del pajaros");
-        System.out.println("dueño: " + nombreDueño);
-        System.out.println("mascota: " + nombreMascota + "sexo: " + sexo);
-        System.out.println("vacunas: " + vacunas);
-        System.out.println("especie: " + especie);
-        System.out.println("fecha de vacuna: " + fechasVacunas);
-        System.out.println("próxima vacuna: " + proximaVacuna);
-
+        System.out.println("Información del pájaro");
+        System.out.println("Dueño: " + nombreDueño);
+        System.out.println("Mascota: " + nombreMascota);
+        System.out.println("Especie del pájaro: " + especiePajaro);
+        System.out.println("Sexo: " + sexo);
+        System.out.println("Vacunas: " + vacunas);
+        System.out.println("Fecha de vacunación: " + fechasVacunas);
+        System.out.println("Próxima vacuna: " + proximaVacuna);
+        System.out.println("Peso: " + peso);
     }
 }
 
 interface registro {
     void registrarMascota();
-
     void consultarMascota();
-
 }
 
 public class veterinaria implements registro {
-    private Scanner scanner = new Scanner(System.in);
-    private ArrayList<veterinario> mascotasRegistradas = new ArrayList<>();
+
+    private final Scanner scanner = new Scanner(System.in);
+    private final ArrayList<veterinario> mascotasRegistradas =
+            new ArrayList<>();
+
+    private final Path archivoMascotas = buscarArchivo();
+
+    private static Path buscarArchivo() {
+        Path local = Path.of("database", "mascotas.json");
+        Path superior = Path.of("..", "database", "mascotas.json");
+
+        if (Files.isDirectory(Path.of("database"))) {
+            return local;
+        }
+
+        return superior;
+    }
+
+    private synchronized String leerMascotas() throws IOException {
+        if (!Files.exists(archivoMascotas)) {
+            Files.createDirectories(archivoMascotas.getParent());
+            Files.writeString(
+                    archivoMascotas,
+                    "[]",
+                    StandardCharsets.UTF_8
+            );
+        }
+
+        return Files.readString(
+                archivoMascotas,
+                StandardCharsets.UTF_8
+        );
+    }
+
+    private synchronized void guardarMascota(String json)
+            throws IOException {
+
+        String contenido = leerMascotas().trim();
+
+        if (!contenido.startsWith("[")
+                || !contenido.endsWith("]")) {
+            throw new IOException("El archivo JSON no es válido.");
+        }
+
+        String interior = contenido.substring(
+                1, contenido.length() - 1
+        ).trim();
+
+        String nuevoContenido;
+
+        if (interior.isEmpty()) {
+            nuevoContenido = "[" + json + "]";
+        } else {
+            nuevoContenido = "[" + interior + "," + json + "]";
+        }
+
+        Files.writeString(
+                archivoMascotas,
+                nuevoContenido,
+                StandardCharsets.UTF_8
+        );
+    }
+
+    private void responder(
+            HttpExchange exchange,
+            int estado,
+            String cuerpo) throws IOException {
+
+        byte[] datos = cuerpo.getBytes(StandardCharsets.UTF_8);
+
+        exchange.getResponseHeaders().set(
+                "Content-Type",
+                "application/json; charset=UTF-8"
+        );
+
+        exchange.getResponseHeaders().set(
+                "Access-Control-Allow-Origin", "*"
+        );
+
+        exchange.getResponseHeaders().set(
+                "Access-Control-Allow-Headers", "Content-Type"
+        );
+
+        exchange.getResponseHeaders().set(
+                "Access-Control-Allow-Methods",
+                "GET, POST, OPTIONS"
+        );
+
+        exchange.sendResponseHeaders(estado, datos.length);
+
+        try (OutputStream salida = exchange.getResponseBody()) {
+            salida.write(datos);
+        }
+    }
+
+    public void iniciarServidor() throws IOException {
+
+        HttpServer server = HttpServer.create(
+                new InetSocketAddress(8080), 0
+        );
+
+        server.createContext("/api/mascotas", exchange -> {
+            try {
+                String metodo = exchange.getRequestMethod();
+
+                if (metodo.equalsIgnoreCase("OPTIONS")) {
+                    exchange.getResponseHeaders().set(
+                            "Access-Control-Allow-Origin", "*"
+                    );
+                    exchange.getResponseHeaders().set(
+                            "Access-Control-Allow-Headers",
+                            "Content-Type"
+                    );
+                    exchange.getResponseHeaders().set(
+                            "Access-Control-Allow-Methods",
+                            "GET, POST, OPTIONS"
+                    );
+
+                    exchange.sendResponseHeaders(204, -1);
+                    exchange.close();
+                    return;
+                }
+
+                if (metodo.equalsIgnoreCase("GET")) {
+                    responder(exchange, 200, leerMascotas());
+                    return;
+                }
+
+                if (metodo.equalsIgnoreCase("POST")) {
+                    String cuerpo = new String(
+                            exchange.getRequestBody().readAllBytes(),
+                            StandardCharsets.UTF_8
+                    ).trim();
+
+                    if (!cuerpo.startsWith("{")
+                            || !cuerpo.endsWith("}")) {
+                        responder(
+                                exchange,
+                                400,
+                                "{\"error\":\"JSON inválido\"}"
+                        );
+                        return;
+                    }
+
+                    guardarMascota(cuerpo);
+
+                    System.out.println(
+                            "Mascota guardada en: "
+                                    + archivoMascotas.toAbsolutePath()
+                    );
+
+                    responder(
+                            exchange,
+                            201,
+                            "{\"mensaje\":\"Mascota guardada correctamente\"}"
+                    );
+                    return;
+                }
+
+                responder(
+                        exchange,
+                        405,
+                        "{\"error\":\"Método no permitido\"}"
+                );
+
+            } catch (Exception error) {
+                error.printStackTrace();
+
+                try {
+                    responder(
+                            exchange,
+                            500,
+                            "{\"error\":\"Error al procesar la solicitud\"}"
+                    );
+                } catch (IOException ignorado) {
+                    exchange.close();
+                }
+            }
+        });
+
+        server.start();
+
+        System.out.println(
+                "Servidor iniciado en http://localhost:8080"
+        );
+
+        System.out.println(
+                "Archivo de datos: "
+                        + archivoMascotas.toAbsolutePath()
+        );
+    }
 
     @Override
     public void registrarMascota() {
-        System.out.println(" registro de mascotas ");
-        System.out.println("Ingrese el nombre del dueño: ");
-        String nombreDueño = scanner.nextLine();
-        System.out.println("Ingrese el nombre de la mascota: ");
-        String nombreMascota = scanner.nextLine();
-        System.out.println("ESPECIE DE LA MASCOTA: ");
-        String especie = scanner.nextLine();
-        System.out.println("vacunas aplicadas: ");
-        String vacunas = scanner.nextLine();
-        System.out.println("fecha de vacunación: ");
-        String fechaVacuna = scanner.nextLine();
-        System.out.println("próxima fecha de vacunación: ");
-        String proximaVacuna = scanner.nextLine();
-        System.out.println("sexo de la mascota: ");
-        String sexo = scanner.nextLine();
-        veterinario nueva = null;
-
-        switch (especie) {
-            case "perro":
-                System.out.println("Ingrese la raza del perro: ");
-                String razaPerro = scanner.nextLine();
-                System.out.println("Ingrese el peso de la mascota: ");
-                String peso = scanner.nextLine();
-                nueva = new Perro(nombreDueño, nombreMascota, especie, vacunas, fechaVacuna, proximaVacuna, sexo,
-                        razaPerro, peso);
-                break;
-            case "gato":
-                System.out.println("Ingrese la raza del gato: ");
-                String razaGato = scanner.nextLine();
-                System.out.println("Ingrese el peso de la mascota: ");
-                String pesoGato = scanner.nextLine();
-                nueva = new Gato(nombreDueño, nombreMascota, especie, vacunas, fechaVacuna, proximaVacuna, sexo,
-                        razaGato, pesoGato);
-                break;
-
-            case "pajaros":
-                System.out.println("Ingrese la especie del pájaro: ");
-                String especiePajaro = scanner.nextLine();
-                System.out.println("Ingrese el peso de la mascota: ");
-                String pesoPajaro = scanner.nextLine();
-                nueva = new Pajaros(nombreDueño, nombreMascota, especie, vacunas, fechaVacuna, proximaVacuna, sexo,
-                        especiePajaro, pesoPajaro);
-                break;
-            default:
-                System.out.println("Especie no válida ");
-                return;
-        }
-        mascotasRegistradas.add(nueva);
-        System.out.println("Mascota registrada exitosamente.");
+        System.out.println(
+                "El registro se realiza desde el formulario web."
+        );
     }
 
     @Override
     public void consultarMascota() {
-        if (mascotasRegistradas.isEmpty()) {
-            System.out.println("No hay mascotas registradas.");
-        } else {
-            for (veterinario v : mascotasRegistradas) {
-                v.mostrarInformacion();
-            }
-
+        try {
+            System.out.println(leerMascotas());
+        } catch (IOException error) {
+            System.out.println(
+                    "No se pudieron consultar las mascotas."
+            );
         }
     }
-    public void iniciarServidor() throws IOException {
-    HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
 
-    server.createContext("/api/mascotas", (HttpExchange exchange) -> {
-
-        exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
-        exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "*");
-        exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-
-        if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
-            exchange.sendResponseHeaders(204, -1);
-            return;
-        }
-
-        if (exchange.getRequestMethod().equalsIgnoreCase("POST")) {
-
-            String body = new String(exchange.getRequestBody().readAllBytes());
-
-            System.out.println("Datos recibidos:");
-            System.out.println(body);
-
-            String respuesta = "{\"mensaje\":\"Mascota registrada correctamente\"}";
-
-            exchange.getResponseHeaders().add("Content-Type", "application/json");
-
-            exchange.sendResponseHeaders(200, respuesta.getBytes().length);
-
-            OutputStream os = exchange.getResponseBody();
-            os.write(respuesta.getBytes());
-            os.close();
-        }
-    });
-
-    server.start();
-
-    System.out.println("Servidor iniciado en http://localhost:8080");
-}
-   /*  public static void main(String[] args) {
+    public static void main(String[] args) {
         veterinaria sistema = new veterinaria();
-        Scanner scanner = new Scanner(System.in);
-        int opcion;
-        do {
-            System.out.println("Sistema de Registro de Mascotas");
-            System.out.println("1. Registrar Mascota");
-            System.out.println("2. Consultar Mascota");
-            System.out.println("3. Salir");
-            System.out.print("Seleccione una opción: ");
-            opcion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar el buffer
-            switch (opcion) {
-                case 1:
-                    sistema.registrarMascota();
-                    break;
-                case 2:
-                    sistema.consultarMascota();
-                    break;
-                case 3:
-                    System.out.println("Saliendo del sistema...");
-                    break;
-                default:
-                    System.out.println("Opción no válida. Intente nuevamente.");
-            }
-        } while (opcion != 3);
-        scanner.close();
+
+        try {
+            sistema.iniciarServidor();
+        } catch (IOException error) {
+            System.err.println(
+                    "No se pudo iniciar el servidor: "
+                            + error.getMessage()
+            );
+        }
     }
-}*/
-public static void main(String[] args) throws IOException {
-
-    veterinaria sistema = new veterinaria();
-
-    sistema.iniciarServidor();
-
-    System.out.println("Backend ejecutándose...");
 }
